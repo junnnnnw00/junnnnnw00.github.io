@@ -431,7 +431,7 @@
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#6366f1';
+      var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#A61955';
       
       if (flashIntensity > 0.01) {
         ctx.fillStyle = accentColor;
@@ -817,7 +817,7 @@
     gameCtx.fillStyle = '#000';
     gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-    var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#6366f1';
+    var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#A61955';
 
     // Title
     gameCtx.font = '700 18px "JetBrains Mono", monospace';
@@ -976,7 +976,7 @@
     gameCtx.fillStyle = 'rgba(0, 0, 0, 0.75)';
     gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-    var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#6366f1';
+    var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#A61955';
     gameCtx.font = '700 20px "JetBrains Mono", monospace';
     gameCtx.fillStyle = accentColor;
     gameCtx.textAlign = 'center';
@@ -992,7 +992,7 @@
     gameCtx.fillStyle = '#000';
     gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-    var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#6366f1';
+    var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#A61955';
 
     gameCtx.strokeStyle = '#111';
     gameCtx.lineWidth = 0.5;
@@ -1141,7 +1141,7 @@
     gameCtx.fillStyle = 'rgba(0, 0, 0, 0.8)';
     gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-    var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#6366f1';
+    var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#A61955';
     gameCtx.font = '700 18px "JetBrains Mono", monospace';
     gameCtx.fillStyle = accentColor;
     gameCtx.textAlign = 'center';
