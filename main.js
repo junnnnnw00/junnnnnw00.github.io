@@ -1535,43 +1535,6 @@
     }
   }
 
-  /* ---- Dashboard Interactive Widget ---- */
-  function initDashboard() {
-    var pads = document.querySelectorAll('.synth-pad');
-    pads.forEach(function(pad) {
-      pad.addEventListener('click', function(e) {
-        var sound = pad.getAttribute('data-sound');
-        if (sound) {
-          if (isMuted) {
-            isMuted = false;
-            localStorage.setItem('isMuted', isMuted);
-            updateMuteButtons();
-            startChiptune();
-          }
-          playSynthSound(sound);
-          triggerVisualFlash();
-        }
-      });
-    });
-
-    var hackBtn = document.getElementById('quick-hack-btn');
-    if (hackBtn) {
-      hackBtn.addEventListener('click', function() {
-        runMatrixHackingSimulation();
-      });
-    }
-
-    var caffeineVal = document.getElementById('caffeine-val');
-    if (caffeineVal) {
-      setInterval(function() {
-        var val = parseInt(caffeineVal.innerText, 10);
-        var diff = Math.random() > 0.55 ? 1 : -1;
-        var next = Math.max(75, Math.min(99, val + diff));
-        caffeineVal.innerText = next + '%';
-      }, 5000);
-    }
-  }
-
   /* ---- Initialization ---- */
   function initAll() {
     updateMuteButtons();
@@ -1581,7 +1544,6 @@
     initTerminal();
     initArcadeControls();
     initProjectFilters();
-    initDashboard();
   }
 
   if (document.readyState === 'loading') {
