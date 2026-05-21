@@ -35,9 +35,22 @@
       requestAnimationFrame(lerp);
     })();
 
-    document.querySelectorAll('a, button, .project-card, .exp-item, .social-link').forEach(function (el) {
-      el.addEventListener('mouseenter', function () { document.body.classList.add('cursor-expanded'); });
-      el.addEventListener('mouseleave', function () { document.body.classList.remove('cursor-expanded'); });
+    document.addEventListener('mouseover', function (e) {
+      var target = e.target;
+      if (target && typeof target.closest === 'function') {
+        if (target.closest('a, button, .project-card, .exp-item, .social-link, .dpad-btn, .synth-pad, .filter-btn')) {
+          document.body.classList.add('cursor-expanded');
+        }
+      }
+    });
+
+    document.addEventListener('mouseout', function (e) {
+      var target = e.target;
+      if (target && typeof target.closest === 'function') {
+        if (target.closest('a, button, .project-card, .exp-item, .social-link, .dpad-btn, .synth-pad, .filter-btn')) {
+          document.body.classList.remove('cursor-expanded');
+        }
+      }
     });
 
     document.addEventListener('mouseleave', function () { document.body.classList.add('cursor-hidden'); });
