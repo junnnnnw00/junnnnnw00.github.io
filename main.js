@@ -1310,7 +1310,7 @@
   /* ---- Dev Card Caffeine Ticker ---- */
   function initDevCard() {
     var valEl = document.getElementById('caffeine-val');
-    var fillEl = document.querySelector('.dev-meter-fill');
+    var fillEl = document.querySelector('.dev-caffeine-fill');
     if (!valEl || !fillEl) return;
     setInterval(function() {
       var v = parseInt(valEl.textContent, 10);
