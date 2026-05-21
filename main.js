@@ -710,8 +710,34 @@
           break;
 
         case 'hack':
-          closeTerminal();
-          setTimeout(runMatrixHackingSimulation, 300);
+          playSynthSound('success');
+          (function() {
+            var seq = [
+              ['', 0],
+              ['┌─ OPERATION: PLMS INFILTRATION ──────────────┐', 60, 'success'],
+              ['', 100],
+              ['[1/5] RECON   Scanning postech.ac.kr ...', 200],
+              ['      Ports: 22/ssh  80/http  8080/plms', 900],
+              ['      Target: plms.postech.ac.kr  ✓', 1500, 'success'],
+              ['', 1600],
+              ['[2/5] AUTH    Loading creds (48,291 entries) ...', 1700],
+              ['      Attempt 9182: lms_admin:admin@2024!', 2600],
+              ['      ✓ ACCESS GRANTED', 3500, 'success'],
+              ['', 3600],
+              ['[3/5] SHELL   root@plms-backend-01 $', 3700, 'success'],
+              ['', 3800],
+              ['[4/5] EXFIL   Dumping grades DB ...', 3900],
+              ['      [████████████░░░░] 75%  CS101_midterm.pdf', 4700],
+              ['      [████████████████] 100% grades_3847.json  ✓', 5300, 'success'],
+              ['', 5400],
+              ['[5/5] CLEAN   auth.log patched. History cleared.  ✓', 5500, 'success'],
+              ['', 5900],
+              ['└─ COMPLETE — no forensic trace. Enjoy the A+. ──┘', 6000, 'success'],
+            ];
+            seq.forEach(function(item) {
+              setTimeout(function() { printLine(item[0], item[2] || 'info'); }, item[1]);
+            });
+          })();
           break;
 
         case 'sudo':
@@ -721,12 +747,23 @@
           } else {
             var action = args.join(' ').toLowerCase();
             if (action === 'hack') {
-              printLine("SUDO PRIVILEGES GRANTED. OVERRIDING SYSTEM CONTROLS...", "error");
+              printLine("SUDO PRIVILEGES GRANTED. ESCALATING...", "error");
               playSynthSound('success');
               setTimeout(function() {
-                closeTerminal();
-                runMatrixHackingSimulation();
-              }, 600);
+                var seq = [
+                  ['[root] Executing at max privilege...', 0, 'error'],
+                  ['[1/5] RECON   Target: plms.postech.ac.kr  ✓', 400, 'success'],
+                  ['[2/5] AUTH    lms_admin:admin@2024!  ✓  ACCESS GRANTED', 900, 'success'],
+                  ['[3/5] SHELL   root@plms-backend-01 $  connected', 1300, 'success'],
+                  ['[4/5] EXFIL   [████████████████] 100%  grades_3847.json ✓', 1700, 'success'],
+                  ['[5/5] CLEAN   auth.log patched  ✓', 2100, 'success'],
+                  ['', 2500],
+                  ['└─ COMPLETE — root makes this embarrassingly easy. ──┘', 2600, 'success'],
+                ];
+                seq.forEach(function(item) {
+                  setTimeout(function() { printLine(item[0], item[2] || 'info'); }, item[1]);
+                });
+              }, 300);
             } else if (action === 'overclock') {
               printLine("OVERCLOCKING CPU... ACCELERATING SYNTH CLOCK...", "error");
               playSynthSound('powerup');
@@ -1270,216 +1307,19 @@
     });
   }
 
-  /* ---- Matrix Hacking Simulation (Multi-Phase Cinematic) ---- */
-  function runMatrixHackingSimulation() {
-    var overlay = document.querySelector('.matrix-overlay');
-    var canvas = document.getElementById('matrix-canvas');
-    var bar = document.querySelector('.hack-bar');
-    var statusText = document.querySelector('.hack-status-text');
-    var phaseLabel = document.querySelector('.hack-phase-label');
-    var logBox = document.querySelector('.hack-log-box');
-
-    if (!overlay || !canvas || !bar) return;
-
-    overlay.classList.add('active');
-    playSynthSound('error');
-
-    // Matrix rain canvas
-    var ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    var columns = Math.floor(canvas.width / 14);
-    var ypos = [];
-    for (var i = 0; i < columns; i++) { ypos[i] = Math.random() * -canvas.height; }
-    var chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノABCDEFGHIJKLMNOP0101<<>>{}[]()!@#$%^&*';
-    var matrixLoopId = null;
-
-    function drawMatrix() {
-      ctx.fillStyle = 'rgba(0,0,0,0.04)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.font = '13px monospace';
-      for (var col = 0; col < columns; col++) {
-        var isHead = Math.random() > 0.95;
-        ctx.fillStyle = isHead ? '#ffffff' : '#f0175f';
-        ctx.globalAlpha = isHead ? 0.9 : 0.35;
-        var ch = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillText(ch, col * 14, ypos[col]);
-        ctx.globalAlpha = 1;
-        if (ypos[col] > canvas.height && Math.random() > 0.975) { ypos[col] = 0; }
-        else { ypos[col] += 14; }
-      }
-    }
-    matrixLoopId = setInterval(drawMatrix, 33);
-
-    // Multi-phase sequence
-    var phases = [
-      {
-        name: 'PHASE 1 — RECONNAISSANCE',
-        duration: 3200,
-        logs: [
-          'Scanning target: postech.ac.kr ...',
-          'NMAP OS detection: Linux 5.15 (Ubuntu 22.04)',
-          'Open ports: 22/ssh  80/http  443/https  8080/plms',
-          'Enumerating subdomains... found 14 hosts',
-          'Target identified: plms.postech.ac.kr',
-          'WAF detected: AWS CloudFront / Shield',
-          'SSL cert fingerprint: SHA256:3a:f1:7b:...',
-          'Gathering OSINT... done.',
-        ]
-      },
-      {
-        name: 'PHASE 2 — PORT SCAN & VULN ANALYSIS',
-        duration: 3500,
-        logs: [
-          'Running nmap -sV -sC -p- ...',
-          'CVE-2024-3400: PAN-OS GlobalProtect — CRITICAL',
-          'CVE-2023-44487: HTTP/2 Rapid Reset — HIGH',
-          'CVE-2023-46747: F5 BIG-IP SSRF — HIGH',
-          'Checking login endpoint: /plms/login ...',
-          'Login form: username + password (no 2FA detected)',
-          'SQL injection probe: OR 1=1-- \u2192 timeout... retry',
-          'Credential stuffing list loaded: 48,291 entries',
-          'Rate limit: none detected. Proceeding.',
-        ]
-      },
-      {
-        name: 'PHASE 3 — EXPLOITATION',
-        duration: 4000,
-        logs: [
-          'Launching credential spray attack...',
-          'Attempt [192/48291] admin:postech1234... FAIL',
-          'Attempt [2341/48291] jwhong:P0stechCS26... FAIL',
-          'Attempt [9182/48291] lms_admin:admin@2024!... SUCCESS',
-          '\u2713 Authentication bypass: lms_admin account compromised',
-          'Escalating privileges via SSRF chain...',
-          'Pivot: internal API gateway at 10.0.3.14:9000',
-          'Injecting reverse shell payload... done',
-          'Shell connected: root@plms-backend-01 $',
-          'Disabling auth logging: sed -i audit.log ...',
-        ]
-      },
-      {
-        name: 'PHASE 4 — DATA EXTRACTION',
-        duration: 4500,
-        logs: [
-          'Mounting database: mysql -u root plms_db ...',
-          'Tables found: users, courses, assignments, grades, exams',
-          'Dumping exam_solutions table... [████████  80%]',
-          'Extracted: CS101_midterm_solutions.pdf (2.1 MB)',
-          'Extracted: MATH201_final_key.pdf (880 KB)',
-          'Extracted: AI_assignment3_reference.py (44 KB)',
-          'Copying grade records for 3,847 students...',
-          'Exfiltrating via encrypted HTTPS tunnel to C2...',
-          'Transfer rate: 12.4 MB/s — ETA: 8s',
-          'All files received at attacker C2: 203.0.113.42',
-        ]
-      },
-      {
-        name: 'PHASE 5 — COVERING TRACKS',
-        duration: 3000,
-        logs: [
-          'Clearing bash history: history -c ...',
-          'Removing /var/log/auth.log entries...',
-          'Patching last login timestamps...',
-          'Removing temporary files and shells...',
-          'Restoring original auth.log mtime...',
-          'Closing all reverse shell connections...',
-          'Spoofing source IPs in remaining logs...',
-          '\u2713 Tracks covered. No forensic trace expected.',
-          '\u2714 OPERATION COMPLETE',
-        ]
-      }
-    ];
-
-    var totalDuration = phases.reduce(function(sum, p) { return sum + p.duration; }, 0);
-    var elapsed = 0;
-    var currentPhaseIdx = 0;
-    var logTimer = null;
-
-    function runPhase(phaseIdx) {
-      if (phaseIdx >= phases.length) {
-        finishHack();
-        return;
-      }
-      var phase = phases[phaseIdx];
-      currentPhaseIdx = phaseIdx;
-      if (phaseLabel) phaseLabel.textContent = phase.name;
-      if (statusText) statusText.textContent = phase.logs[0];
-      if (logBox) logBox.innerHTML = '';
-
-      var logIdx = 0;
-      var logDelay = Math.floor(phase.duration / (phase.logs.length + 1));
-
-      function appendLog() {
-        if (logIdx >= phase.logs.length) {
-          clearTimeout(logTimer);
-          elapsed += phase.duration;
-          var pct = Math.min(100, Math.round((elapsed / totalDuration) * 100));
-          if (bar) bar.style.width = pct + '%';
-          setTimeout(function() { runPhase(phaseIdx + 1); }, 200);
-          return;
-        }
-        var logText = phase.logs[logIdx];
-        if (statusText) statusText.textContent = logText;
-        if (logBox) {
-          var line = document.createElement('span');
-          line.className = 'log-line';
-          line.textContent = '> ' + logText;
-          logBox.appendChild(line);
-          logBox.scrollTop = logBox.scrollHeight;
-        }
-        var pct = Math.min(99, Math.round(((elapsed + (logIdx / phase.logs.length) * phase.duration) / totalDuration) * 100));
-        if (bar) bar.style.width = pct + '%';
-        logIdx++;
-        logTimer = setTimeout(appendLog, logDelay);
-      }
-
-      appendLog();
-    }
-
-    function finishHack() {
-      if (bar) bar.style.width = '100%';
-      if (phaseLabel) phaseLabel.textContent = '\u2714 INTRUSION COMPLETE';
-      if (statusText) statusText.textContent = 'All data exfiltrated. Connection severed.';
-      playSynthSound('success');
-
-      setTimeout(function() {
-        clearInterval(matrixLoopId);
-        overlay.classList.remove('active');
-
-        var termModal = document.querySelector('.terminal-modal');
-        if (termModal) {
-          termModal.classList.add('active');
-          var out = document.querySelector('.terminal-output');
-          if (out) {
-            var lines = [
-              '',
-              '[\u2714 OPERATION POSTECH PLMS — COMPLETE]',
-              'Target: plms.postech.ac.kr',
-              'Accounts compromised: 1 (lms_admin)',
-              'Files exfiltrated: 3 exam solutions, 3,847 grade records',
-              'Duration: ~18 seconds',
-              'Forensic trace: NONE',
-              '',
-              'All data is now available in /exfil/postech/',
-              'Type \'projects\' to see what we built with this data.',
-            ];
-            lines.forEach(function(text) {
-              var div = document.createElement('div');
-              div.className = 'terminal-line ' + (text.indexOf('\u2714') >= 0 ? 'success' : 'info');
-              div.textContent = text;
-              out.appendChild(div);
-            });
-            var body = document.querySelector('.terminal-body');
-            if (body) body.scrollTop = body.scrollHeight;
-          }
-        }
-      }, 1800);
-    }
-
-    // Start the sequence
-    runPhase(0);
+  /* ---- Dev Card Caffeine Ticker ---- */
+  function initDevCard() {
+    var valEl = document.getElementById('caffeine-val');
+    var fillEl = document.querySelector('.dev-meter-fill');
+    if (!valEl || !fillEl) return;
+    setInterval(function() {
+      var v = parseInt(valEl.textContent, 10);
+      var next = Math.max(72, Math.min(99, v + (Math.random() > 0.5 ? 1 : -1)));
+      valEl.textContent = next + '%';
+      fillEl.style.setProperty('--pct', next + '%');
+    }, 4000);
   }
+
 
   /* ---- Projects Filtering Logic ---- */
   function initProjectFilters() {
@@ -1544,6 +1384,7 @@
     initTerminal();
     initArcadeControls();
     initProjectFilters();
+    initDevCard();
   }
 
   if (document.readyState === 'loading') {

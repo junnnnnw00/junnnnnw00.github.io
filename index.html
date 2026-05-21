@@ -86,17 +86,6 @@
     </div>
   </div>
 
-  <div class="matrix-overlay">
-    <canvas id="matrix-canvas"></canvas>
-    <div class="hack-text">
-      <div class="hack-phase-label">[ INITIALIZING ]</div>
-      <div class="hack-status-text">Accessing POSTECH Mainframe...</div>
-      <div class="hack-progress">
-        <div class="hack-bar"></div>
-      </div>
-      <div class="hack-log-box"></div>
-    </div>
-  </div>
 
   <header class="nav">
     <div class="nav-inner">
@@ -148,13 +137,33 @@
             Open to projects &amp; collabs
           </div>
         </div>
-        <div class="hero-photo">
-          <img
-            src="https://github.com/junnnnnw00.png"
-            alt="Junwoo Hong"
-            width="140"
-            height="140"
-          >
+        <div class="dev-card">
+          <div class="dev-card-top">
+            <img src="https://github.com/junnnnnw00.png" alt="Junwoo Hong" class="dev-avatar">
+            <div class="dev-card-info">
+              <span class="dev-handle">junnnnnw00</span>
+              <span class="dev-role">POSTECH · CS</span>
+            </div>
+          </div>
+          <div class="dev-card-body">
+            <div class="dev-stat-row">
+              <span class="dev-stat-label">Status</span>
+              <span class="dev-stat-active"><span class="status-dot"></span>Building</span>
+            </div>
+            <div class="dev-meter">
+              <div class="dev-meter-label">
+                <span class="dev-stat-label">Caffeine</span>
+                <span class="dev-meter-pct" id="caffeine-val">88%</span>
+              </div>
+              <div class="dev-meter-track">
+                <div class="dev-meter-fill" style="--pct:88%"></div>
+              </div>
+            </div>
+            <div class="dev-meta">
+              <span class="dev-meta-item">6 projects</span>
+              <span class="dev-meta-item">1 competition</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
