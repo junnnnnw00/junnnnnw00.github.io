@@ -1,0 +1,60 @@
+name: Build cv.pdf
+
+# The homepage is already laid out as a CV, so the PDF is rendered from the page
+# itself (print stylesheet in style.css) rather than maintained separately.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - index.html
+      - style.css
+      - .github/workflows/cv.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cv-pdf
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Serve the site
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 &
+          for i in $(seq 1 20); do
+            curl -sf http://127.0.0.1:4173/ >/dev/null && break
+            sleep 0.5
+          done
+
+      - name: Render index.html to cv.pdf
+        run: |
+          google-chrome --version
+          google-chrome \
+            --headless=new \
+            --disable-gpu \
+            --no-sandbox \
+            --hide-scrollbars \
+            --virtual-time-budget=10000 \
+            --no-pdf-header-footer \
+            --print-to-pdf=cv.pdf \
+            http://127.0.0.1:4173/
+          test -s cv.pdf
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cv.pdf
+          if git diff --staged --quiet; then
+            echo "cv.pdf unchanged"
+          else
+            git commit -m "chore: rebuild cv.pdf"
+            git push
+          fi
